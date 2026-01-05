@@ -56,12 +56,23 @@ ENV PATH /opt/meme/bin:/opt/meme/libexec/meme:$PATH
 # app
 #RUN wget -q https://github.com/novoalab/$tool/archive/refs/heads/main.tar.gz && \
 #    tar xpfz main.tar.gz && rm main.tar.gz && mv $tool-main /opt/app
-RUN wget -q https://public-docs.crg.es/enovoa/public/lpryszcz/src/nanoRMS2.tar.gz \
-    && tar xpfz nanoRMS2.tar.gz && rm nanoRMS2.tar.gz \
+#RUN wget -q https://public-docs.crg.es/enovoa/public/lpryszcz/src/nanoRMS2.tar.gz \
+#    && tar xpfz nanoRMS2.tar.gz && rm nanoRMS2.tar.gz \
+#    && mv nanoRMS2 /opt/app
+RUN apt update || : \
+    && apt install -y git
+
+RUN pip install "pip<20" "numpy<1.20"
+
+RUN pip install numpy<1.20 pyguppyclient==0.0.6 pysam>=0.18 pandas seaborn mappy pebble scikit-learn==1.0.1 joblib>=0.14
+
+# RUN pip install ont-tombo # TODO
+
+RUN git clone https://github.com/wkusmirek/nanoRMS2.git \
     && mv nanoRMS2 /opt/app
 WORKDIR /opt/app
 # tomto requires pip<20 and numpy<1.20 installed before
-RUN pip install "pip<20" "numpy<1.20" && pip install -r requirements.txt
+#RUN pip install "pip<20" "numpy<1.20" && pip install -r requirements.txt
 
 # link guppy models
 RUN for ext in cfg jsn; do for f in /opt/app/data/*.$ext; do echo $f; ln -s $f /opt/ont/guppy/data/; done; done
