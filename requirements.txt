@@ -3,7 +3,7 @@ pyguppyclient==0.0.6
 pysam>=0.18
 pandas
 seaborn
-ont-tombo
+#ont-tombo
 mappy
 pebble
 scikit-learn==1.0.1
